@@ -63,6 +63,14 @@ impl<H: DuplexSpongeInterface> VerifierState<'_, H> {
         T::decode(buf)
     }
 
+    /// Returns a verifier message `T` that is uniformly distributed and implements `Encoding<[H::U]>`.
+    ///
+    /// CFRG Compliant
+    pub fn verifier_message_expand16<T: Decoding<[H::U]>>(&mut self) -> T {
+        let mut buf = T::Repr::default();
+        self.duplex_sponge_state.squeeze(&mut buf.as_mut()[16..]);
+        T::decode(buf)
+    }
     /// Absorbs a slice of public messages.
     ///
     /// ```

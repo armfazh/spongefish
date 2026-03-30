@@ -193,6 +193,15 @@ where
         T::decode(buf)
     }
 
+    /// Returns a verifier message `T` that is uniformly distributed.
+    ///
+    /// CFRG Compliant
+    pub fn verifier_message_expand16<T: Decoding<[H::U]>>(&mut self) -> T {
+        let mut buf = T::Repr::default();
+        self.duplex_sponge_state.squeeze(&mut buf.as_mut()[16..]);
+        T::decode(buf)
+    }
+
     /// Alias for [`narg_string`][ProverState::narg_string].
     #[deprecated(note = "Please use ProverState::narg_string instead.")]
     #[inline]
